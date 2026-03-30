@@ -5,15 +5,17 @@
 # include "builtins.h"
 
 int		execute_commands(t_shell *shell, t_cmd *cmd);
-
 int		execute_single(t_shell *shell, t_cmd *cmd);
 int		execute_pipeline(t_shell *shell, t_cmd *cmd);
-
 int		redirection(t_redir *redir);
+int	    handle_heredoc(char *delimiter);
 
 char	*get_cmd_path(char *cmd, char **envp);
 
 void	wait_children(pid_t last_pid, t_shell *shell);
-int	    handle_heredoc(char *delimiter);
+void	setup_signals_exec(void);
+void	setup_signals_interactive(void);
+void	setup_child_fds(int in_fd, int out_fd);
+void	exec_cmd(t_shell *shell, t_cmd *cmd);
 
 #endif

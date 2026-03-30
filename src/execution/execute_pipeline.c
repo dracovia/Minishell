@@ -2,42 +2,26 @@
 
 static void	exec_child(t_shell *shell, t_cmd *cmd, int in_fd, int out_fd)
 {
-	char	*path;
-
-	if (in_fd != STDIN_FILENO)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
-	if (out_fd != STDOUT_FILENO)
-	{
-		dup2(out_fd, STDOUT_FILENO);
-		close(out_fd);
-	}
+	setup_signals_exec();
+	setup_child_fds(in_fd, out_fd);
 	if (redirection(cmd->redirs))
 		exit(1);
-	if (is_builtin(cmd->argv[0]))
-		exit(exec_builtin(shell, cmd));
-	path = get_cmd_path(cmd->argv[0], shell->envp);
-	if (!path)
-	{
-		printf("minishell: %s: command not found\n", cmd->argv[0]);
-		exit(127);
-	}
-	execve(path, cmd->argv, shell->envp);
-	perror("execve");
-	exit(1);
+	exec_cmd(shell, cmd);
 }
 
-static void	setup_pipe(t_cmd *cmd, int fd[2])
+static int	setup_pipe(t_cmd *cmd, int fd[2])
 {
 	if (cmd->next)
-		pipe(fd);
+	{
+		if (pipe(fd) < 0)
+			return (perror("pipe"), 1);
+	}
 	else
 	{
 		fd[0] = STDIN_FILENO;
 		fd[1] = STDOUT_FILENO;
 	}
+	return (0);
 }
 
 static void	handle_parent(int in_fd, int fd[2])
@@ -51,12 +35,17 @@ static void	handle_parent(int in_fd, int fd[2])
 static int	wait_all(void)
 {
 	int	status;
+	int	last_status;
 
+	last_status = 0;
 	while (wait(&status) > 0)
-		;
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (1);
+	{
+		if (WIFEXITED(status))
+			last_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			last_status = 128 + WTERMSIG(status);
+	}
+	return (last_status);
 }
 
 int	execute_pipeline(t_shell *shell, t_cmd *cmd)
@@ -68,8 +57,11 @@ int	execute_pipeline(t_shell *shell, t_cmd *cmd)
 	in_fd = STDIN_FILENO;
 	while (cmd)
 	{
-		setup_pipe(cmd, fd);
+		if (setup_pipe(cmd, fd))
+			return (1);
 		pid = fork();
+		if (pid < 0)
+			return (perror("fork"), 1);
 		if (pid == 0)
 			exec_child(shell, cmd, in_fd, fd[1]);
 		handle_parent(in_fd, fd);
@@ -78,4 +70,3 @@ int	execute_pipeline(t_shell *shell, t_cmd *cmd)
 	}
 	return (wait_all());
 }
-
