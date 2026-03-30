@@ -1,12 +1,13 @@
 #include "../../include/execution.h"
+#include "../../libft/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 static int helper(char *error, char *path)
 {
-    perror(error);
-    free(path);
-    return (1);
+   perror(error);
+   free(path);
+   return (1);
 }
 
 static int	execute_builtin_with_redir(t_shell *shell, t_cmd *cmd)
@@ -18,7 +19,7 @@ static int	execute_builtin_with_redir(t_shell *shell, t_cmd *cmd)
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdin < 0 || saved_stdout < 0)
-		return (1);
+		return (perror("dup"), 1);
 	if (redirection(cmd->redirs))
 	{
 		dup2(saved_stdin, STDIN_FILENO);
@@ -41,48 +42,53 @@ static void	child_process(t_shell *shell, t_cmd *cmd, char *path)
 		exit(1);
 	execve(path, cmd->argv, shell->envp);
 	helper("execve", path);
+   free(path);
 	exit(1);
 }
 
 static int execute_external(t_shell *shell, t_cmd *cmd)
 {
-    pid_t   pid;
-    char    *path;
-    int    status;
+   pid_t   pid;
+   char    *path;
+   int    status;
 
-    path = get_cmd_path(cmd->argv[0], shell->envp);
-    if (!path)
-    {
-        printf("minishell: %s: command not found\n", cmd->argv[0]);
-        return (127);
-    }
-    pid = fork();
-    if (pid < 0)
-        return (helper("fork", path));
-    if (pid == 0)
-        child_process(shell, cmd, path);
-    waitpid(pid, &status, 0);
-    free(path);
-    if (WIFEXITED(status)) //did the process exit normally?
+   path = get_cmd_path(cmd->argv[0], shell->envp);
+   if (!path)
+   {
+      ft_putstr_fd("minishell: ", 2);
+      ft_putstr_fd(cmd->argv[0], 2);
+      ft_putstr_fd(": command not found\n", 2);
+      return (127);
+   }
+   pid = fork();
+   if (pid < 0)
+      return (helper("fork", path));
+   if (pid == 0)
+      child_process(shell, cmd, path);
+   waitpid(pid, &status, 0);
+   free(path);
+   if (WIFEXITED(status)) //did the process exit normally?
 		return (WEXITSTATUS(status)); // what is the exit code?
-    return (1);
+   if (WIFSIGNALED(status))
+	   return (128 + WTERMSIG(status));
+   return (1);
 }
 
 int execute_single(t_shell *shell, t_cmd *cmd)
 {
-    int status;
+   int status;
 
-    if (!cmd || !cmd->argv || !cmd->argv[0])
-        return (0);
-    if (is_builtin(cmd->argv[0]))
-    {
-        status = execute_builtin_with_redir(shell, cmd);
-        shell->last_status = status;
-        return (status);
-    }
-    status = execute_external(shell, cmd);
-    shell->last_status = status;
-    return (status);
+   if (!cmd || !cmd->argv || !cmd->argv[0])
+      return (0);
+   if (is_builtin(cmd->argv[0]))
+   {
+      status = execute_builtin_with_redir(shell, cmd);
+      shell->last_status = status;
+      return (status);
+   }
+   status = execute_external(shell, cmd);
+   shell->last_status = status;
+   return (status);
 }
 
 /*
