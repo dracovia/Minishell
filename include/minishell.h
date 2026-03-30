@@ -17,6 +17,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <signal.h>
+
+typedef struct s_shell
+{
+	char	**envp;
+	int		last_status;
+}	t_shell;
 
 int	has_unclosed_quotes(char *line);
 t_quote_type	update_quote_state(t_quote_type state, char c);
