@@ -20,7 +20,7 @@ int is_valid(char *str)
 static void	update_var(char **envp, int index, char *arg)
 {
 	free(envp[index]);
-	envp[index] = strdup(arg);
+	envp[index] = ft_strdup(arg);
 }
 
 static int	find_var_index(char *name, char **envp)
@@ -36,7 +36,7 @@ static int	find_var_index(char *name, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
 			return (i);
 		i++;
 	}
@@ -58,10 +58,10 @@ static char	**add_var(char **envp, char *arg)
 	i = 0;
 	while (envp[i])
 	{
-		new_env[i] = strdup(envp[i]);
+		new_env[i] = ft_strdup(envp[i]);
 		i++;
 	}
-	new_env[i] = strdup(arg);
+	new_env[i] = ft_strdup(arg);
 	new_env[i + 1] = NULL;
 	i = 0;
 	while (envp[i])
@@ -81,7 +81,11 @@ int  builtin_export(t_shell *shell, char **argv)
     while (argv[i])
     {
         if (!is_valid(argv[i]))
-        	printf("export: `%s`: not a valid identifier\n", argv[i]);
+        {
+			ft_putstr_fd("export: `", 2);
+			ft_putstr_fd(argv[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+		}
         else if (ft_strchr(argv[i], '='))
         {
             index = find_var_index(argv[i], shell -> envp);

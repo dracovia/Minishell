@@ -1,6 +1,5 @@
-#include "../../include/builtins.h"
 #include "../../include/minishell.h"
-#include <stdio.h>
+#include "../../libft/libft.h"
 #include <stdlib.h>
 
 static int	is_numeric(char *str)
@@ -27,17 +26,17 @@ int builtin_exit(t_shell *shell, char **argv)
 {
     long status;
 
-    printf("exit\n");
+    write(1, "exit\n", 5);
     if (!argv[1])
         exit(shell->last_status);
     if (!is_numeric(argv[1]))
     {
-        printf("exit: numeric argument required\n");
+        ft_putstr_fd("exit: numeric argument required\n", 2);
         exit(255); //we use 255 as a strong error signal
     }
     if (argv[2])
     {
-        printf("exit: too many arguments\n");
+        ft_putstr_fd("exit: too many arguments\n", 2);
         return (1);   
     }
     status = atol(argv[1]) % 256;

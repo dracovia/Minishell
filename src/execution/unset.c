@@ -37,19 +37,22 @@ static char	**copy_env_without_unset(char **envp, int index)
 	int		count;
 	char	**new_env;
 
-	count = 0;
-	while (envp[count])
-		count++;
+	count = -1;
+	while (envp[++count])
+		;
 	new_env = malloc(sizeof(char *) * count);
 	if (!new_env)
 		return (NULL);
-	i = 0;
+	i = -1;
 	j = 0;
-	while (envp[i])
+	while (envp[++i])
 	{
 		if (i != index)
-			new_env[j++] = strdup(envp[i]);
-		i++;
+		{
+			new_env[j++] = ft_strdup(envp[i]);
+			if (!new_env[j - 1])
+				return (new_env[--j] = NULL, free_env(new_env), NULL);
+		}
 	}
 	new_env[j] = NULL;
 	return (new_env);

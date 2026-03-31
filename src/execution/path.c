@@ -23,11 +23,11 @@ static char	*get_env_value(char *name, char **envp)
 
 	if (!name || !envp)
 		return (NULL);
-	len = strlen(name);
+	len = ft_strlen(name);
 	i = 0;
 	while (envp[i])
 	{
-		if (strncmp(envp[i], name, len) == 0
+		if (ft_strncmp(envp[i], name, len) == 0
 			&& envp[i][len] == '=')
 			return (envp[i] + len + 1);
 		i++;
@@ -45,6 +45,8 @@ static char	*join_path(char *dir, char *cmd)
 		return (NULL);
 	full = ft_strjoin(tmp, cmd);
 	free(tmp);
+	if (!full)
+		return (NULL);
 	return (full);
 }
 
@@ -58,7 +60,10 @@ static char	*check_paths(char **paths, char *cmd)
 	{
 		full = join_path(paths[i], cmd);
 		if (!full)
-			return (NULL);
+		{
+			i++;
+			continue;
+		}
 		if (access(full, X_OK) == 0)
 			return (full);
 		free(full);
@@ -75,14 +80,14 @@ char	*get_cmd_path(char *cmd, char **envp)
 
 	if (!cmd)
 		return (NULL);
-	if (strchr(cmd, '/'))
+	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, X_OK) == 0)
-			return (strdup(cmd));
+			return (ft_strdup(cmd));
 		return (NULL);
 	}
 	path = get_env_value("PATH", envp);
-	if (!path)
+	if (!path || !*path)
 		return (NULL);
 	paths = ft_split(path, ':');
 	if (!paths)

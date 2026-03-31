@@ -1,5 +1,4 @@
-# include "../../include/builtins.h"
-#include <stdio.h>
+#include "../../libft/libft.h"
 
 int builtin_pwd(void)
 {
@@ -11,7 +10,8 @@ int builtin_pwd(void)
         perror("pwd");
         return (1);
     }
-    printf("%s\n", pwd);
+    ft_putstr_fd(pwd, 1);
+    ft_putchar_fd('\n', 1);
     free(pwd);
     return (0);
 }

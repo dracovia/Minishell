@@ -1,5 +1,4 @@
-#include <string.h>
-#include <unistd.h>
+#include "../../libft/libft.h"
 
 static int is_n_flag(char *str)
 {
@@ -31,7 +30,7 @@ int builtin_echo(char **argv)
     }
     while (argv[i])
     {
-        write(1, argv[i], strlen(argv[i]));
+        write(1, argv[i], ft_strlen(argv[i]));
         if (argv[i + 1])
             write(1, " ", 1);
         i++;
