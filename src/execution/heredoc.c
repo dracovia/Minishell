@@ -1,0 +1,56 @@
+#include "../../include/execution.h"
+#include "../../libft/libft.h"
+#include "get_next_line/get_next_line.h"
+
+static int	read_heredoc_input(int write_fd, char *delimiter)
+{
+	char	*line;
+	int	len;
+
+	len = ft_strlen(delimiter);
+	while (1)
+	{
+		write(1, "> ", 2);
+		line = get_next_line(0);
+		if (!line)
+			break ;
+		if (ft_strlen(line) == len + 1
+			&& ft_strncmp(line, delimiter, len) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(write_fd, line, ft_strlen(line));
+		free(line);
+	}
+	return (0);
+}
+
+int	handle_heredoc(char *delimiter)
+{
+	int		fd[2];
+	pid_t	pid;
+	int		status;
+
+	if (pipe(fd) < 0)
+		return (perror("pipe"), -1);
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"), -1);
+	if (pid == 0)
+	{
+		setup_signals_exec();
+		close(fd[0]);
+		read_heredoc_input(fd[1], delimiter);
+		close(fd[1]);
+		exit(0);
+	}
+	close(fd[1]);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		close(fd[0]);
+		return (-1);
+	}
+	return (fd[0]);
+}

@@ -17,6 +17,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
+#include <string.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
+
+typedef struct s_shell
+{
+	char	**envp;
+	int		last_status;
+}	t_shell;
 
 # endif
