@@ -16,7 +16,7 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-static char	*get_env_value(char *name, char **envp)
+static char	*get_env_valuee(char *name, char **envp)
 {
 	int		i;
 	size_t	len;
@@ -86,7 +86,7 @@ char	*get_cmd_path(char *cmd, char **envp)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-	path = get_env_value("PATH", envp);
+	path = get_env_valuee("PATH", envp);
 	if (!path || !*path)
 		return (NULL);
 	paths = ft_split(path, ':');

@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:42 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 19:16:56 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/04/04 09:29:07 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ t_token	*build_token_list(char *line, char **envp, int last_status)
 	if (!tokens)
 		return (NULL);
 	if (!expand_tokens(tokens, envp, last_status))
+	{
+		free_token_list(tokens);
+		return (NULL);
+	}
+	if (!remove_quotes_from_tokens(tokens))
 	{
 		free_token_list(tokens);
 		return (NULL);

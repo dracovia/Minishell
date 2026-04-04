@@ -1,5 +1,5 @@
 #include "../../include/builtins.h"
-#include <stdlib.h>
+#include "../../libft/libft.h"
 
 static int	find_var_index(char *name, char **envp)
 {

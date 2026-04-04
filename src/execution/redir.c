@@ -1,5 +1,4 @@
 #include "../../include/execution.h"
-#include <stdio.h>
 
 static int handle_in(char *file)
 {

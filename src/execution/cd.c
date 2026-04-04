@@ -1,7 +1,7 @@
 #include "../../libft/libft.h"
 #include "../../include/minishell.h"
 
-static char *get_env_value(char *key, char **envp)
+char *get_env_valuee(char *key, char **envp)
 {
     int     i;
     int  key_len;
@@ -26,7 +26,7 @@ int builtin_cd(t_shell *shell, char **argv)
 
     if (!argv[1])
     {
-        path = get_env_value("HOME", shell->envp);
+        path = get_env_valuee("HOME", shell->envp);
         if (!path)
         {
             ft_putstr_fd("cd: HOME not set\n", 2);
