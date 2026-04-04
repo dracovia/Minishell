@@ -22,6 +22,7 @@ LIBFT		= $(LIBFT_DIR)/libft.a
 
 SRC_DIR		= src
 PARSER_DIR	= $(SRC_DIR)/parser
+EXEC_DIR	= $(SRC_DIR)/execution
 OBJ_DIR		= obj
 
 SRC			= \
