@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 // inside one command segment:
 // when you see a redirection token, the next token is its target

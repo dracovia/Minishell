@@ -55,22 +55,42 @@ t_cmd	*build_command_list(t_token *tokens)
 	return (parse_pipeline(tokens));
 }
 
-void	cleanup_parser_tokens(t_token *tokens)
+t_parser	*parse_input(char *line, char **envp, int last_status)
 {
-	free_token_list(tokens);
-}
-
-t_cmd	*parse_input(char *line, char **envp, int last_status)
-{
-	t_token	*tokens;
-	t_cmd	*cmds;
+	t_parser	*parser;
+	t_token		*tokens;
 
 	if (!validate_input(line))
 		return (NULL);
 	tokens = build_token_list(line, envp, last_status);
 	if (!tokens)
 		return (NULL);
-	cmds = build_command_list(tokens);
-	cleanup_parser_tokens(tokens);
-	return (cmds);
+	parser = malloc(sizeof(t_parser));
+	if (!parser)
+	{
+		free_token_list(tokens);
+		return (NULL);
+	}
+	parser->cmds = build_command_list(tokens);
+	parser->tokens = tokens;
+	parser->envp = envp;
+	parser->last_status = last_status;
+	return (parser);
+}
+
+void	free_parser(t_parser *parser)
+{
+	if (!parser)
+		return ;
+	free_token_list(parser->tokens);
+	free_cmd_list(parser->cmds);
+	free(parser);
+}
+
+void	free_parser_keep_cmds(t_parser *parser)
+{
+	if (!parser)
+		return ;
+	free_token_list(parser->tokens);
+	free(parser);
 }

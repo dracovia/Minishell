@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 // walk through the token list and expand:
 // normal environment variables like $USER

@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../include/minishell.h"
+#include "../../libft/libft.h"
+
 // is this a valid variable-name start?
 // is this a valid variable-name character?
 // how long is the variable name after $?

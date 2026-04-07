@@ -45,7 +45,25 @@ SRC			= \
 				$(PARSER_DIR)/redir_utils.c \
 				$(PARSER_DIR)/parser_entry.c \
 				$(PARSER_DIR)/parser_cleanup.c \
-				$(PARSER_DIR)/parser_debug.c 
+				$(PARSER_DIR)/parser_debug.c \
+				$(EXEC_DIR)/get_next_line/get_next_line.c \
+				$(EXEC_DIR)/get_next_line/get_next_line_utils.c \
+				$(EXEC_DIR)/execute_commands.c \
+				$(EXEC_DIR)/cd.c \
+				$(EXEC_DIR)/echo.c \
+				$(EXEC_DIR)/env.c \
+				$(EXEC_DIR)/execute_pipeline.c \
+				$(EXEC_DIR)/execute_single.c \
+				$(EXEC_DIR)/exit.c \
+				$(EXEC_DIR)/export.c \
+				$(EXEC_DIR)/heredoc.c \
+				$(EXEC_DIR)/is_builtin.c \
+				$(EXEC_DIR)/path.c \
+				$(EXEC_DIR)/pipeline_child.c \
+				$(EXEC_DIR)/pwd.c \
+				$(EXEC_DIR)/redir.c \
+				$(EXEC_DIR)/signals.c \
+				$(EXEC_DIR)/unset.c
 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

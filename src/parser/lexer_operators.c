@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 t_token_type	get_operator_type(char *line)
 {

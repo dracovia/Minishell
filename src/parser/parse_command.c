@@ -13,6 +13,7 @@
 // normal words go argv and redir syntax goes to t_redir nodes 
  
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 
 

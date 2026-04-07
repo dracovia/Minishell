@@ -5,7 +5,7 @@
 static int	read_heredoc_input(int write_fd, char *delimiter)
 {
 	char	*line;
-	int	len;
+	size_t	len;
 
 	len = ft_strlen(delimiter);
 	while (1)

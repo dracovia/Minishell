@@ -143,8 +143,9 @@ void			free_redir_list(t_redir *redirs);
 int				validate_input(char *line);
 t_token			*build_token_list(char *line, char **envp, int last_status);
 t_cmd			*build_command_list(t_token *tokens);
-void			cleanup_parser_tokens(t_token *tokens);
-t_cmd			*parse_input(char *line, char **envp, int last_status);
+t_parser		*parse_input(char *line, char **envp, int last_status);
+void			free_parser(t_parser *parser);
+void			free_parser_keep_cmds(t_parser *parser);
 
 void			free_tokens_and_cmds(t_token *tokens, t_cmd *cmds);
 void			free_tokens_and_redirs(t_token *tokens, t_redir *redirs);

@@ -56,17 +56,13 @@ static char	**add_var(char **envp, char *arg)
 	if (!new_env)
 		return (envp);
 	i = 0;
-	while (envp[i])
+	while (i < count)
 	{
-		new_env[i] = ft_strdup(envp[i]);
+		new_env[i] = envp[i];
 		i++;
 	}
 	new_env[i] = ft_strdup(arg);
 	new_env[i + 1] = NULL;
-	i = 0;
-	while (envp[i])
-		free(envp[i++]);
-	free(envp);
 	return (new_env);
 }
 

@@ -13,6 +13,7 @@
 //$? is a special expansion case
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 char	*status_to_str(int status)
 {

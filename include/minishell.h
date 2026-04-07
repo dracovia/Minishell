@@ -27,6 +27,7 @@ typedef struct s_shell
 {
 	char	**envp;
 	int		last_status;
+	t_cmd	*cmds;
 }	t_shell;
 
 # endif

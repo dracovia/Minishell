@@ -30,6 +30,7 @@ static void	free_env(char **envp)
 	free(envp);
 }
 
+
 static char	**copy_env_without_unset(char **envp, int index)
 {
 	int		i;
@@ -65,7 +66,6 @@ static char	**remove_var(char **envp, int index)
 	new_env = copy_env_without_unset(envp, index);
 	if (!new_env)
 		return (envp);
-	free_env(envp);
 	return (new_env);
 }
 

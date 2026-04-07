@@ -1,50 +1,69 @@
 
 #include "../include/minishell.h"
+#include "../include/execution.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
-static void	test_one_input(char *input, char **envp, int last_status)
+// Initialize shell structure with environment and default values
+static t_shell	*init_shell(char **envp)
 {
-	t_cmd	*cmds;
+	t_shell	*shell;
 
-	printf("========================================\n");
-	printf("INPUT: %s\n", input);
-	cmds = parse_input(input, envp, last_status);
-	if (!cmds)
-	{
-		printf("Parse failed or input invalid.\n");
-		return ;
-	}
-	print_cmd_list(cmds);
-	free_cmd_list(cmds);
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (NULL);
+	shell->envp = envp;
+	shell->last_status = 0;
+	shell->cmds = NULL;
+	return (shell);
 }
 
+// Execute a single user input and update shell status
+static void	execute_user_input(t_shell *shell, char *input)
+{
+	t_parser	*parser;
+
+	parser = parse_input(input, shell->envp, shell->last_status);
+	if (!parser)
+	{
+		printf("minishell: syntax error\n");
+		return ;
+	}
+	if (!parser->cmds)
+	{
+		free_parser_keep_cmds(parser);
+		return ;
+	}
+	shell->last_status = execute_commands(shell, parser->cmds);
+	free_parser(parser);
+}
+
+// Main interactive shell loop with signal handling
 int	main(int argc, char **argv, char **envp)
 {
-	char	*tests[] = {
-		"echo ab\"cd\"ef",
-		"echo ab'$USER'ef",
-		"echo \"a|b\"",
-		"echo \"a>b\"",
-		"echo '$?'",
-		"echo $NOTFOUND",
-		"echo \"$NOTFOUND\"",
-		"echo $",
-		"echo $5",
-		"echo \"$\"",
-		"echo \"\"",
-		"echo ''",
-		"cat < \"in file.txt\"",
-		"echo hi > \"out file.txt\"",
-		NULL
-	};
-	int		i;
+	t_shell	*shell;
+	char	*input;
+	int		status;
 
 	(void)argc;
 	(void)argv;
-	i = 0;
-	while (tests[i])
+	shell = init_shell(envp);
+	if (!shell)
+		return (1);
+	setup_signals_interactive();
+	while (1)
 	{
-		test_one_input(tests[i], envp, 42);
-		i++;
+		input = readline("minishell$ ");
+		if (!input)
+			break ;
+		if (input[0])
+		{
+			add_history(input);
+			execute_user_input(shell, input);
+		}
+		free(input);
 	}
-	return (0);
+	status = shell->last_status;
+	free(shell);
+	return (status);
 }
