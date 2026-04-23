@@ -81,11 +81,14 @@ char	*read_file(int fd, char *res)
 		if (byte_read == -1)
 		{
 			free(buffer);
+			free(res);
 			return (NULL);
 		}
 		buffer[byte_read] = 0;
 		res = ft_free(res, buffer);
-		if (ft_strchr(buffer, '\n'))
+		if (!res)
+			break ;
+		if (ft_strchr(res, '\n'))
 			break ;
 	}
 	free(buffer);

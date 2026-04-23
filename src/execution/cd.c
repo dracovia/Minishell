@@ -33,11 +33,6 @@ int builtin_cd(t_shell *shell, char **argv)
             return (1);
         }
     }
-    else if (argv[2])
-    {
-        ft_putstr_fd("cd: too many arguments\n", 2);
-        return (1);
-    }
     else
         path = argv[1];
     if (chdir(path) != 0)

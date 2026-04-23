@@ -5,7 +5,7 @@ int is_valid(char *str)
 {
     int i;
 
-    if (!str || !str[0] || (str[0] != '-' && !ft_isalpha(str[0])))
+    if (!str || !str[0] || (!ft_isalpha(str[0]) && str[0] != '_'))
         return (0);
     i = 1;
     while (str[i] && str[i] != '=')
@@ -66,31 +66,30 @@ static char	**add_var(char **envp, char *arg)
 	return (new_env);
 }
 
-int  builtin_export(t_shell *shell, char **argv)
+int	builtin_export(t_shell *shell, char **argv)
 {
-    int i;
-    int index;
-
-    if (!argv[1])
-        return (0);
-    i = 1;
-    while (argv[i])
-    {
-        if (!is_valid(argv[i]))
-        {
+	int	i;
+	int	error;
+	error = 0;
+	i = 1;
+	while (argv[i])
+	{
+		if (!is_valid(argv[i]))
+		{
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd(argv[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
+			error = 1;
 		}
-        else if (ft_strchr(argv[i], '='))
-        {
-            index = find_var_index(argv[i], shell -> envp);
-            if (index != -1)
-                update_var(shell->envp, index, argv[i]);
-            else 
-                shell->envp = add_var(shell->envp, argv[i]);
-        }
-        i++;
-    }
-    return (0);
+		else if (ft_strchr(argv[i], '='))
+		{
+			if (find_var_index(argv[i], shell->envp) != -1)
+				update_var(shell->envp, find_var_index(argv[i], shell->envp),
+					argv[i]);
+			else
+				shell->envp = add_var(shell->envp, argv[i]);
+		}
+		i++;
+	}
+	return (error);
 }

@@ -26,13 +26,12 @@ int builtin_exit(t_shell *shell, char **argv)
 {
     long status;
 
-    write(1, "exit\n", 5);
     if (!argv[1])
         exit(shell->last_status);
     if (!is_numeric(argv[1]))
     {
         ft_putstr_fd("exit: numeric argument required\n", 2);
-        exit(255); //we use 255 as a strong error signal
+        exit(2);
     }
     if (argv[2])
     {
