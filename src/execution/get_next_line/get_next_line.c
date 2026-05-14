@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:13:34 by kal-mawl          #+#    #+#             */
-/*   Updated: 2025/07/09 08:18:44 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/05/13 18:02:40 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_free(char *buffer, char *buf)
 {
 	char	*temp;
 
-	temp = ft_strjoin(buffer, buf);
+	temp = ft_strjoinnn(buffer, buf);
 	free(buffer);
 	return (temp);
 }

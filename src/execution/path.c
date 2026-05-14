@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/13 17:48:12 by kal-mawl          #+#    #+#             */
+/*   Updated: 2026/05/13 17:48:13 by kal-mawl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "../../libft/libft.h"
 # include "../../include/execution.h"
 
@@ -16,7 +28,7 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-static char	*get_env_valuee(char *name, char **envp)
+char	*get_env_valuee(char *name, char **envp)
 {
 	int		i;
 	size_t	len;

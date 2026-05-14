@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_single.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/13 17:47:42 by kal-mawl          #+#    #+#             */
+/*   Updated: 2026/05/13 17:47:43 by kal-mawl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/execution.h"
 #include "../../libft/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-static int helper(char *error, char *path)
+static int	helper(char *error, char *path)
 {
    perror(error);
    free(path);
@@ -38,11 +50,12 @@ static int	execute_builtin_with_redir(t_shell *shell, t_cmd *cmd)
 
 static void	child_process(t_shell *shell, t_cmd *cmd, char *path)
 {
+   setup_signals_exec();
 	if (redirection(cmd->redirs))
 		exit(1);
 	execve(path, cmd->argv, shell->envp);
 	helper("execve", path);
-   free(path);
+   // free(path);
 	exit(1);
 }
 

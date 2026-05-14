@@ -1,24 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/13 17:47:10 by kal-mawl          #+#    #+#             */
+/*   Updated: 2026/05/13 17:47:11 by kal-mawl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../libft/libft.h"
 #include "../../include/minishell.h"
-
-char *get_env_valuee(char *key, char **envp)
-{
-    int     i;
-    int  key_len;
-
-    if (!key || !envp)
-        return (NULL);
-    key_len = ft_strlen(key);
-    i = 0;
-    while (envp[i])
-    {
-        if (ft_strncmp(envp[i], key, key_len) == 0 
-            && envp[i][key_len] == '=')
-            return (envp[i] + key_len + 1);
-        i++;
-    }
-    return (NULL);
-}
+#include "../../include/execution.h"
 
 int builtin_cd(t_shell *shell, char **argv)
 {
@@ -30,6 +24,15 @@ int builtin_cd(t_shell *shell, char **argv)
         if (!path)
         {
             ft_putstr_fd("cd: HOME not set\n", 2);
+            return (1);
+        }
+    }
+    else if (ft_strncmp(argv[1], "-", 1) == 0)  // Handle cd -
+    {
+        path = get_env_valuee("OLDPWD", shell->envp);
+        if (!path)
+        {
+            ft_putstr_fd("cd: OLDPWD not set\n", 2);
             return (1);
         }
     }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/13 17:48:32 by kal-mawl          #+#    #+#             */
+/*   Updated: 2026/05/13 17:48:33 by kal-mawl         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/execution.h"
 
 static int handle_in(char *file)
@@ -63,7 +75,7 @@ static int	handle_single_redir(t_redir *redir)
 		return (handle_append(redir->target));
 	else if (redir->type == T_HEREDOC)
 	{
-		fd = handle_heredoc(redir->target);
+		fd = redir->fd;
 		if (fd < 0)
 			return (1);
 		if (dup2(fd, STDIN_FILENO) < 0)

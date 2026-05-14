@@ -6,13 +6,13 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:13:42 by kal-mawl          #+#    #+#             */
-/*   Updated: 2025/07/09 08:18:38 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/05/13 18:01:42 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoinnn(char const *s1, char const *s2)
 {
 	int		sizetotal;
 	char	*res;

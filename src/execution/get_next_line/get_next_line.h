@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 08:10:35 by kal-mawl          #+#    #+#             */
-/*   Updated: 2025/07/09 08:18:49 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/05/13 18:01:29 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoinnn(char const *s1, char const *s2);
 char	*ft_strchr(const char *string, int searchedChar );
 
 void	ft_bzero(void *s, size_t n);
