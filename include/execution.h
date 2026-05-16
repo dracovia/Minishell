@@ -9,7 +9,6 @@ int		execute_single(t_shell *shell, t_cmd *cmd);
 int		execute_pipeline(t_shell *shell, t_cmd *cmd);
 int		redirection(t_redir *redir);
 int	    handle_heredoc(char *delimiter);
-int	    process_all_heredocs(t_cmd *cmds);
 
 char	*get_cmd_path(char *cmd, char **envp);
 char	*get_env_valuee(char *name, char **envp);

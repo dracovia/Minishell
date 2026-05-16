@@ -75,7 +75,7 @@ static int	handle_single_redir(t_redir *redir)
 		return (handle_append(redir->target));
 	else if (redir->type == T_HEREDOC)
 	{
-		fd = redir->fd;
+		fd = handle_heredoc(redir->target);
 		if (fd < 0)
 			return (1);
 		if (dup2(fd, STDIN_FILENO) < 0)

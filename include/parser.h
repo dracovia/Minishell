@@ -44,7 +44,6 @@ typedef struct s_redir
 	t_token_type type; // It has a type (input, output, heredoc, append)
 	char *target;	   //  a target (the file name or heredoc delimiter)and  this target should be open for writing , reading , appending  or has heredoc content?
 	t_quote_type quote;
-	int fd;	   // ✅ ADD THIS - stores heredoc file descriptor
 	struct s_redir *next; //  a pointer to the next redirection in the same command (since a command can have multiple redirections).
 } t_redir;
 // this represents one command in the pipeline.

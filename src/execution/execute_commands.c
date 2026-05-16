@@ -17,8 +17,6 @@ int	execute_commands(t_shell *shell, t_cmd *cmd)
 {
 	if (!shell || !cmd)
 		return (1);
-	if (process_all_heredocs(cmd) < 0)
-		return (1);
 	if (cmd->next)
 		return (execute_pipeline(shell, cmd));
 	return (execute_single(shell, cmd));

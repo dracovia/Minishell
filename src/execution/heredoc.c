@@ -66,29 +66,3 @@ int	handle_heredoc(char *delimiter)
 	}
 	return (fd[0]);
 }
-
-static int	process_heredocs_in_redir(t_redir *redirs)
-{
-	while (redirs)
-	{
-		if (redirs->type == T_HEREDOC)
-		{
-			redirs->fd = handle_heredoc(redirs->target);
-			if (redirs->fd < 0)
-				return (-1);
-		}
-		redirs = redirs->next;
-	}
-	return (0);
-}
-
-int	process_all_heredocs(t_cmd *cmds)
-{
-	while (cmds)
-	{
-		if (process_heredocs_in_redir(cmds->redirs) < 0)
-			return (-1);
-		cmds = cmds->next;
-	}
-	return (0);
-}
