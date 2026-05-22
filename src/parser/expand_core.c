@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:02 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 01:45:06 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 17:49:22 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ int	expand_variable(char *str, int *i, char **result, char **envp)
 		return (0);
 	value = get_env_value(name, envp);
 	free(name);
-	if (!value)
-		return (0);
-	*result = join_and_free(*result, value);
-	if (!*result)
-		return (0);
+	if (value)
+	{
+		*result = join_and_free(*result, value);
+		if (!*result)
+			return (0);
+	}
 	*i += len + 1;
 	return (1);
 }
@@ -92,6 +93,33 @@ char	*expand_token_value(char *value, char **envp, int last_status)
 				return (expand_fail(result));
 		}
 		else if (!copy_normal_char(value, &i, &result, &quote))
+			return (expand_fail(result));
+	}
+	return (result);
+}
+
+char	*expand_heredoc_line(char *line, t_shell *shell)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	while (line[i])
+	{
+		if (line[i] == '$' && line[i + 1] == '?')
+		{
+			if (!expand_status(line, &i, &result, shell->last_status))
+				return (expand_fail(result));
+		}
+		else if (line[i] == '$' && is_var_start(line[i + 1]))
+		{
+			if (!expand_variable(line, &i, &result, shell->envp))
+				return (expand_fail(result));
+		}
+		else if (!copy_normal_char(line, &i, &result, &(t_quote_type){Q_NONE}))
 			return (expand_fail(result));
 	}
 	return (result);

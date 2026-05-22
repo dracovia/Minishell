@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:46 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 17:55:00 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 19:42:15 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_redir	*new_redir(char *target, t_token_type type, t_quote_type quote)
 	redir->target = target;
 	redir->type = type;
 	redir->quote = quote;
+	redir->fd = -1;
 	redir->next = NULL;
 	return (redir);
 }
@@ -64,6 +65,11 @@ void	free_redir_list(t_redir *redirs)
 	while (redirs)
 	{
 		tmp = redirs->next;
+		if (redirs->fd >= 0)
+		{
+			close(redirs->fd);
+			redirs->fd = -1;
+		}
 		free(redirs->target);
 		free(redirs);
 		redirs = tmp;

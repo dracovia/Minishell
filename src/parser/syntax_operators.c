@@ -6,7 +6,21 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:32:46 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/11 20:38:57 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 20:28:25 by mfassad          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/minishell.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_operators.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/11 20:32:46 by mfassad           #+#    #+#             */
+/*   Updated: 2026/05/22 20:20:00 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +33,7 @@ static int	is_pipe_invalid(char *line, int i)
 	prev = prev_non_space_index(line, i);
 	if (prev < 0)
 		return (1);
-	if (!has_next_word(line, i + 1))
-		return (1);
-	if (line[i + 1] == '|')
+	if (!has_next_command_part(line, i + 1))
 		return (1);
 	return (0);
 }
@@ -34,7 +46,8 @@ static int	is_redir_invalid(char *line, int i)
 	if ((line[i] == '>' && line[i + 1] == '<')
 		|| (line[i] == '<' && line[i + 1] == '>'))
 		return (1);
-	if (line[i + len] && (line[i + len] == '<' || line[i + len] == '>'))
+	if (line[i + len] && (line[i + len] == '<'
+			|| line[i + len] == '>' || line[i + len] == '|'))
 		return (1);
 	if (!has_next_word(line, i + len))
 		return (1);

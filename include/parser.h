@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:26:44 by mfassad           #+#    #+#             */
-/*   Updated: 2026/04/04 09:34:41 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 20:29:48 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_redir
 	t_token_type type; // It has a type (input, output, heredoc, append)
 	char *target;	   //  a target (the file name or heredoc delimiter)and  this target should be open for writing , reading , appending  or has heredoc content?
 	t_quote_type quote;
+	int	fd; // the file descriptor that will be used for this redirection after opening the target file (or creating a pipe for heredoc)
 	struct s_redir *next; //  a pointer to the next redirection in the same command (since a command can have multiple redirections).
 } t_redir;
 // this represents one command in the pipeline.
@@ -162,5 +163,7 @@ void			print_cmd_list(t_cmd *cmds);
 int		count_unquoted_len(char *str);
 char	*remove_quotes_from_value(char *str);
 int		remove_quotes_from_tokens(t_token *tokens);
+
+int	has_next_command_part(char *line, int i);
 
 #endif

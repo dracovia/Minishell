@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:47:49 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/13 17:47:50 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/05/22 20:04:29 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <stdlib.h>
 
 static int	is_numeric(char *str)
@@ -34,22 +36,56 @@ static int	is_numeric(char *str)
 	return (1);
 }
 
-int builtin_exit(t_shell *shell, char **argv)
+static void	free_envp_exit(char **envp)
 {
-    long status;
+	int	i;
 
-    if (!argv[1])
-        exit(shell->last_status);
-    if (!is_numeric(argv[1]))
-    {
-        ft_putstr_fd("exit: numeric argument required\n", 2);
-        exit(2);
-    }
-    if (argv[2])
-    {
-        ft_putstr_fd("exit: too many arguments\n", 2);
-        return (1);   
-    }
-    status = atol(argv[1]) % 256;
-    exit(status);
+	if (!envp)
+		return ;
+	i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
+}
+
+static void	clean_exit_shell(t_shell *shell)
+{
+	if (!shell)
+		return ;
+	if (shell->parser)
+		free_parser(shell->parser);
+	else if (shell->cmds)
+		free_cmd_list(shell->cmds);
+	free_envp_exit(shell->envp);
+	rl_clear_history();
+	free(shell);
+}
+
+int	builtin_exit(t_shell *shell, char **argv)
+{
+	long	status;
+
+	if (!argv[1])
+	{
+		status = shell->last_status;
+		clean_exit_shell(shell);
+		exit(status);
+	}
+	if (!is_numeric(argv[1]))
+	{
+		ft_putstr_fd("exit: numeric argument required\n", 2);
+		clean_exit_shell(shell);
+		exit(2);
+	}
+	if (argv[2])
+	{
+		ft_putstr_fd("exit: too many arguments\n", 2);
+		return (1);
+	}
+	status = atol(argv[1]) % 256;
+	clean_exit_shell(shell);
+	exit(status);
 }

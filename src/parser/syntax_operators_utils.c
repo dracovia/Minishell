@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 02:18:56 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/10 02:19:24 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 20:26:37 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ int	has_next_word(char *line, int i)
 	while (line[i] && (line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)))
 		i++;
 	return (line[i] && !is_operator_char(line[i]));
+}
+
+int	has_next_command_part(char *line, int i)
+{
+	while (line[i] && (line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)))
+		i++;
+	if (!line[i] || line[i] == '|')
+		return (0);
+	return (1);
 }
 
 int	prev_non_space_index(char *line, int i)

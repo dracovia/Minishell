@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:32 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/13 17:48:33 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/05/22 17:56:01 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/execution.h"
 
-static int handle_in(char *file)
+static int	handle_in(char *file)
 {
-    int fd;
-    
-    fd = open(file, O_RDONLY);
-    if (fd < 0)
+	int	fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 		return (perror(file), 1);
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
@@ -25,32 +25,15 @@ static int handle_in(char *file)
 		close(fd);
 		return (1);
 	}
-    close(fd);
-    return (0);
+	close(fd);
+	return (0);
 }
 
-static int handle_out(char *file)
+static int	handle_out(char *file)
 {
-    int fd;
+	int	fd;
 
-    fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0)
-		return (perror(file), 1);
-	if (dup2(fd, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		close(fd);
-		return (1);
-	}
-    close(fd);
-    return (0);
-}
-
-static int handle_append(char *file)
-{
-    int fd;
-
-    fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (perror(file), 1);
 	if (dup2(fd, STDOUT_FILENO) < 0)
@@ -63,10 +46,39 @@ static int handle_append(char *file)
 	return (0);
 }
 
-static int	handle_single_redir(t_redir *redir)
+static int	handle_append(char *file)
 {
 	int	fd;
 
+	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		return (perror(file), 1);
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		perror("dup2");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	handle_heredoc_redir(t_redir *redir)
+{
+	if (redir->fd < 0)
+		return (1);
+	if (dup2(redir->fd, STDIN_FILENO) < 0)
+	{
+		perror("dup2");
+		return (1);
+	}
+	close(redir->fd);
+	redir->fd = -1;
+	return (0);
+}
+
+static int	handle_single_redir(t_redir *redir)
+{
 	if (redir->type == T_REDIR_IN)
 		return (handle_in(redir->target));
 	else if (redir->type == T_REDIR_OUT)
@@ -74,18 +86,7 @@ static int	handle_single_redir(t_redir *redir)
 	else if (redir->type == T_APPEND)
 		return (handle_append(redir->target));
 	else if (redir->type == T_HEREDOC)
-	{
-		fd = handle_heredoc(redir->target);
-		if (fd < 0)
-			return (1);
-		if (dup2(fd, STDIN_FILENO) < 0)
-		{
-			perror("dup2");
-			close(fd);
-			return (1);
-		}
-		close(fd);
-	}
+		return (handle_heredoc_redir(redir));
 	return (0);
 }
 

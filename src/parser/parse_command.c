@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:22 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 17:58:51 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 21:34:08 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,14 @@
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-
+static int	should_keep_word(t_token *token)
+{
+	if (!token || token->type != T_WORD)
+		return (0);
+	if (token->value[0] == '\0' && token->quote == Q_NONE)
+		return (0);
+	return (1);
+}
 
 int	count_cmd_args(t_token *start, t_token *end)
 {
@@ -26,7 +33,7 @@ int	count_cmd_args(t_token *start, t_token *end)
 	{
 		if (is_redir_token(start->type) && start->next != end)
 			start = start->next;
-		else if (start->type == T_WORD)
+		else if (should_keep_word(start))
 			count++;
 		start = start->next;
 	}
@@ -48,7 +55,7 @@ char	**build_cmd_argv(t_token *start, t_token *end)
 	{
 		if (is_redir_token(start->type) && start->next != end)
 			start = start->next;
-		else if (start->type == T_WORD)
+		else if (should_keep_word(start))
 		{
 			argv[i] = ft_strdup(start->value);
 			if (!argv[i])

@@ -8,8 +8,8 @@ int		execute_commands(t_shell *shell, t_cmd *cmd);
 int		execute_single(t_shell *shell, t_cmd *cmd);
 int		execute_pipeline(t_shell *shell, t_cmd *cmd);
 int		redirection(t_redir *redir);
-int	    handle_heredoc(char *delimiter);
-
+int	handle_heredoc(t_shell *shell, char *delimiter, t_quote_type quote);
+char	*expand_heredoc_line(char *line, t_shell *shell);
 char	*get_cmd_path(char *cmd, char **envp);
 char	*get_env_valuee(char *name, char **envp);
 
@@ -21,5 +21,5 @@ void	exec_cmd(t_shell *shell, t_cmd *cmd);
 
 int		get_signal_status(void);
 void	reset_signal_status(void);
-
+int	prepare_heredocs(t_shell *shell, t_cmd *cmds);
 #endif

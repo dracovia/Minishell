@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:26:35 by mfassad           #+#    #+#             */
-/*   Updated: 2026/04/04 08:05:11 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/05/22 18:39:10 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 
 typedef struct s_shell
 {
-	char	**envp;
-	int		last_status;
-	t_cmd	*cmds;
+	char		**envp;
+	int			last_status;
+	t_cmd		*cmds;
+	t_parser	*parser;
 }	t_shell;
 
 # endif
