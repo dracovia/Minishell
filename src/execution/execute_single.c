@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:47:42 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/22 21:45:26 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/03 12:13:21 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,20 +186,4 @@ child → execve("/bin/ls")
 parent → waitpid
    ↓
 update last_status
-*/
-
-/*
-execute_single
-   ↓
-is_builtin ?
-   ↓ YES
-execute_builtin_with_redir
-   ↓
-save fds
-   ↓
-apply redirections
-   ↓
-exec_builtin
-   ↓
-restore fds
 */

@@ -6,7 +6,7 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 18:28:36 by mfassad           #+#    #+#             */
-/*   Updated: 2026/05/22 18:41:22 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/03 12:14:37 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,11 +163,7 @@ static void	handle_input_loop(t_shell *shell, char *input)
 
 	signal_status = get_signal_status();
 	if (signal_status)
-	{
 		shell->last_status = signal_status;
-		free(input);
-		return ;
-	}
 	if (input[0])
 	{
 		add_history(input);
