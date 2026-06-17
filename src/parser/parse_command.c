@@ -6,12 +6,10 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:22 by mfassad           #+#    #+#             */
-/*   Updated: 2026/05/22 21:34:08 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:05:01 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// normal words go argv and redir syntax goes to t_redir nodes 
- 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 

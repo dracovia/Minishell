@@ -6,16 +6,10 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:12 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/12 03:25:14 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:07:43 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// scan the raw input line and turn it into a linked list of tokens
-
-// when spaces separate words
-// when quotes protect spaces
-// when |, <, >, <<, >> are operators
-// when a sequence is a normal word
 #include "../../include/minishell.h"
 
 int	is_space(char c)
@@ -58,4 +52,4 @@ t_token	*lexer(char *line)
 		}
 	}
 	return (tokens);
-}      
+}

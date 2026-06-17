@@ -6,16 +6,12 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:32 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 17:59:16 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:05:20 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
-
-// inside one command segment:
-// when you see a redirection token, the next token is its target
-// together they form one redirection entry
 
 t_redir	*create_redir_node(t_token *op_token, t_token *target_token)
 {

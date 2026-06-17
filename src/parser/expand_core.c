@@ -6,28 +6,12 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:02 by mfassad           #+#    #+#             */
-/*   Updated: 2026/05/22 17:49:22 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:19:49 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
-
-// walk through the token list and expand:
-// normal environment variables like $USER
-// special status variable $?
-// In single quotes, variables should not be expanded
-// In double quotes, variables should be expanded
-// outside of quotes, variables should be expanded
-
-int	should_expand_var(char *str, int i, t_quote_type quote)
-{
-	if (str[i] != '$' || quote == Q_SINGLE)
-		return (0);
-	if (str[i + 1] == '?')
-		return (1);
-	return (is_var_start(str[i + 1]));
-}
 
 int	copy_normal_char(char *str, int *i, char **result, t_quote_type *quote)
 {

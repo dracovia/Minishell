@@ -6,18 +6,16 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:06 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 00:52:33 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:18:14 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//$? is a special expansion case
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
 char	*status_to_str(int status)
 {
-    return ft_itoa(status);
+	return (ft_itoa(status));
 }
 
 int	expand_status(char *str, int *i, char **result, int last_status)

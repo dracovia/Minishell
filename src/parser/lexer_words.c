@@ -6,13 +6,11 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:19 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/12 23:39:08 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:04:49 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// keep reading until you hit a space or operator while outside quotes
 
 int	word_len(char *line, int i)
 {

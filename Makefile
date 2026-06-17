@@ -6,7 +6,7 @@
 #    By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/04 07:54:57 by mfassad           #+#    #+#              #
-#    Updated: 2026/04/04 09:36:39 by mfassad          ###   ########.fr        #
+#    Updated: 2026/06/17 23:38:32 by mfassad          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRC			= \
 				$(PARSER_DIR)/token_utils.c \
 				$(PARSER_DIR)/expand_utils.c \
 				$(PARSER_DIR)/expand_status.c \
+				$(PARSER_DIR)/utils.c \
 				$(PARSER_DIR)/expand_core.c \
 				$(PARSER_DIR)/quote_removal.c \
 				$(PARSER_DIR)/parse_pipeline.c \

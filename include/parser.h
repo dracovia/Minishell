@@ -6,63 +6,62 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:26:44 by mfassad           #+#    #+#             */
-/*   Updated: 2026/05/22 20:29:48 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:34:03 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
-#define PARSER_H
+# define PARSER_H
 
-// What kind of thing did I just read from the input? (done by tokenizer)
 typedef enum e_token_type
 {
-	T_WORD,		 // Used for normal command text (ls , -l , hello, etc.)
-	T_PIPE,		 // Used for the | character, which connects two commands together.
-	T_REDIR_IN,	 // Used to know that the next token must be a file and this file is input redirection target <
-	T_REDIR_OUT, // Used to mark normal output redirection >
-	T_HEREDOC,	 // used to mark a heredoc <<, which tells that next token is not a normal filename but a delimiter for the heredoc content
-	T_APPEND	 // used to mark append output redirection >>, which tells that the next token is a file and this file is output redirection target, but instead of overwriting the file, it appends to it.
-} t_token_type;
+	T_WORD,
+	T_PIPE,
+	T_REDIR_IN,
+	T_REDIR_OUT,
+	T_HEREDOC,
+	T_APPEND
+}	t_token_type;
 
 typedef enum e_quote_type
 {
-	Q_NONE,	  // Normal mode i.e spaces split the words/ tokens , |, <, >, <<, >> are operators and $VAR can expand.
-	Q_SINGLE, // prevent interpretation of metacharacters i.e Everything becomes literal until the closing 'and $ expansion is also prevented in single quotes.
-	Q_DOUBLE  // Still protects spaces and operators from splitting the token, but still allows $ expansion.
-} t_quote_type;
-// this enables lexer to read raw text and produce a linked list of tokens, each token has a type (word, pipe, redirection, etc.) and a value (the actual text of the token).
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE
+}	t_quote_type;
+
 typedef struct s_token
 {
-	char *value; // The actual text of the token, e.g "ls", "-l", "|", ">", etc.
-	t_token_type type;
-	t_quote_type quote;	  // Did this token come from a quoted context? (usefull for empty tokens and for knowing if $ expansion should be done or not)
-	struct s_token *next; // Because token count is unknown at first, and appending tokens during lexing is natural
-} t_token;
-// this represents one redirection attached to one command.
+	char			*value;
+	t_token_type	type;
+	t_quote_type	quote;
+	struct s_token	*next;
+}	t_token;
+
 typedef struct s_redir
 {
-	t_token_type type; // It has a type (input, output, heredoc, append)
-	char *target;	   //  a target (the file name or heredoc delimiter)and  this target should be open for writing , reading , appending  or has heredoc content?
-	t_quote_type quote;
-	int	fd; // the file descriptor that will be used for this redirection after opening the target file (or creating a pipe for heredoc)
-	struct s_redir *next; //  a pointer to the next redirection in the same command (since a command can have multiple redirections).
-} t_redir;
-// this represents one command in the pipeline.
+	t_token_type	type;
+	char			*target;
+	t_quote_type	quote;
+	int				fd;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_cmd
 {
-	char **argv;		// build from tokens of type T_WORD .(argv = ["echo", "hello", NULL])
-	t_redir *redirs;	// stores all redirections belonging to this command. eg grep x < in.txt > out.txt here grep is cmd
-	struct s_cmd *next; // grep x < in.txt > out.txt ,eg ls | grep c | wc (each is node in list of cmds)
-} t_cmd;
+	char			**argv;
+	t_redir			*redirs;
+	struct s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_parser
 {
-	char *line;		 // raw input from readline
-	t_token *tokens; // token list produced after lexing
-	t_cmd *cmds;	 // final parsed command list
-	char **envp;	 // environment variables, needed for $ expansion and for execve
-	int last_status; // This stores the previous command exit status (used to handle $?))
-} t_parser;
+	char	*line;
+	t_token	*tokens;
+	t_cmd	*cmds;
+	char	**envp;
+	int		last_status;
+}	t_parser;
 
 int				is_in_quotes(t_quote_type state);
 int				is_quote_char(char c);
@@ -92,7 +91,8 @@ t_quote_type	get_word_quote_type(char *word);
 t_token			*create_word_token(char *line, int *i);
 int				handle_word_token(char *line, int *i, t_token **tokens);
 
-t_token			*new_token(char *value, t_token_type type, t_quote_type quote);
+t_token			*new_token(char *value, t_token_type type,
+					t_quote_type quote);
 t_token			*last_token(t_token *tokens);
 int				append_token(t_token **tokens, t_token *new_token);
 int				token_count(t_token *tokens);
@@ -106,14 +106,19 @@ char			*join_and_free(char *s1, char *s2);
 char			*expand_fail(char *result);
 
 char			*status_to_str(int status);
-int				expand_status(char *str, int *i, char **result, int last_status);
+int				expand_status(char *str, int *i,
+					char **result, int last_status);
 
-int				should_expand_var(char *str, int i, t_quote_type quote);
-int				copy_normal_char(char *str, int *i, char **result,
-					t_quote_type *quote);
-int				expand_variable(char *str, int *i, char **result, char **envp);
-char			*expand_token_value(char *value, char **envp, int last_status);
-int				expand_tokens(t_token *tokens, char **envp, int last_status);
+int				should_expand_var(char *str, int i,
+					t_quote_type quote);
+int				copy_normal_char(char *str, int *i,
+					char **result, t_quote_type *quote);
+int				expand_variable(char *str, int *i,
+					char **result, char **envp);
+char			*expand_token_value(char *value,
+					char **envp, int last_status);
+int				expand_tokens(t_token *tokens,
+					char **envp, int last_status);
 
 t_token			*next_pipe_token(t_token *tokens);
 t_token			*token_after_pipe(t_token *tokens);
@@ -126,7 +131,8 @@ char			**build_cmd_argv(t_token *start, t_token *end);
 t_cmd			*create_cmd_node(char **argv, t_redir *redirs);
 t_cmd			*parse_command(t_token *start, t_token *end);
 
-t_redir			*create_redir_node(t_token *op_token, t_token *target_token);
+t_redir			*create_redir_node(t_token *op_token,
+					t_token *target_token);
 t_redir			*parse_redirs(t_token *start, t_token *end);
 
 void			free_argv(char **argv);
@@ -136,21 +142,25 @@ void			free_cmd_list(t_cmd *cmds);
 int				has_redirection(t_token *start, t_token *end);
 
 int				is_redir_token(t_token_type type);
-t_redir			*new_redir(char *target, t_token_type type, t_quote_type quote);
+t_redir			*new_redir(char *target, t_token_type type,
+					t_quote_type quote);
 t_redir			*last_redir(t_redir *redirs);
 int				append_redir(t_redir **redirs, t_redir *new_redir);
 void			free_redir_list(t_redir *redirs);
 
 int				validate_input(char *line);
-t_token			*build_token_list(char *line, char **envp, int last_status);
+t_token			*build_token_list(char *line,
+					char **envp, int last_status);
 t_cmd			*build_command_list(t_token *tokens);
-t_parser		*parse_input(char *line, char **envp, int last_status);
+t_parser		*parse_input(char *line,
+					char **envp, int last_status);
 void			free_parser(t_parser *parser);
 void			free_parser_keep_cmds(t_parser *parser);
 
 void			free_tokens_and_cmds(t_token *tokens, t_cmd *cmds);
 void			free_tokens_and_redirs(t_token *tokens, t_redir *redirs);
-void			free_parser_data(t_token *tokens, t_cmd *cmds, t_redir *redirs);
+void			free_parser_data(t_token *tokens,
+					t_cmd *cmds, t_redir *redirs);
 char			**cleanup_argv_and_return_null(char **argv);
 t_cmd			*cleanup_tokens_and_return_null(t_token *tokens);
 
@@ -160,10 +170,12 @@ void			print_argv(char **argv);
 void			print_redir_list(t_redir *redirs);
 void			print_cmd_list(t_cmd *cmds);
 
-int		count_unquoted_len(char *str);
-char	*remove_quotes_from_value(char *str);
-int		remove_quotes_from_tokens(t_token *tokens);
+int				count_unquoted_len(char *str);
+char			*remove_quotes_from_value(char *str);
+int				remove_quotes_from_tokens(t_token *tokens);
 
-int	has_next_command_part(char *line, int i);
+int				has_next_command_part(char *line, int i);
+int				should_expand_var(char *str, int i, t_quote_type quote);
+int				validate_input(char *line);
 
 #endif

@@ -6,13 +6,9 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:28 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 02:07:43 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:05:10 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//take the token list and build a linked list of t_cmd,
-// where each node represents one command in the pipeline.
-// each cmd segment end at next pipe or end of token list.
 
 #include "../../include/minishell.h"
 

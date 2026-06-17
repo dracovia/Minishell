@@ -6,20 +6,12 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 21:27:09 by mfassad           #+#    #+#             */
-/*   Updated: 2026/03/13 00:19:53 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/17 23:14:07 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
-
-// is this a valid variable-name start?
-// is this a valid variable-name character?
-// how long is the variable name after $?
-// what is the value of this variable in envp?
-// how do I safely append strings while building expanded output?
-
-#include "../../include/minishell.h"
 
 int	is_var_start(char c)
 {
