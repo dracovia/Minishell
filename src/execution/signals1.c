@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   signals1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:38 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/22 20:42:04 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:34:09 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include <readline/history.h>
 
 static int	g_signal = 0;
+
+void	setup_signals_interactive(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
+}
 
 static void	handle_sigint(int sig)
 {
@@ -40,20 +48,4 @@ int	get_signal_status(void)
 void	reset_signal_status(void)
 {
 	g_signal = 0;
-}
-
-void	setup_signals_interactive(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
-}
-
-void	setup_signals_exec(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGTSTP, SIG_DFL);
-	signal(SIGPIPE, SIG_DFL);
 }

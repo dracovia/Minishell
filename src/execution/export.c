@@ -3,76 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:47:55 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/22 19:53:38 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:57:08 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/builtins.h"
 #include "../../libft/libft.h"
-
-static int	is_valid(char *str)
-{
-	int	i;
-
-	if (!str || !str[0] || (!ft_isalpha(str[0]) && str[0] != '_'))
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static int	env_count(char **envp)
-{
-	int	count;
-
-	count = 0;
-	while (envp && envp[count])
-		count++;
-	return (count);
-}
-
-static int	name_len(char *str)
-{
-	int	len;
-
-	len = 0;
-	while (str[len] && str[len] != '=')
-		len++;
-	return (len);
-}
-
-static int	find_var_index(char *name, char **envp)
-{
-	int	i;
-	int	len;
-
-	if (!name || !envp)
-		return (-1);
-	len = name_len(name);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, len) == 0
-			&& (envp[i][len] == '=' || envp[i][len] == '\0'))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-static void	update_var(char **envp, int index, char *arg)
-{
-	free(envp[index]);
-	envp[index] = ft_strdup(arg);
-}
 
 static char	**add_var(char **envp, char *arg)
 {

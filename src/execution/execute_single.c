@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_single.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:47:42 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/03 12:13:21 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:45:48 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,6 @@ static int	helper(char *error, char *path)
 	perror(error);
 	free(path);
 	return (1);
-}
-
-static int	restore_builtin_fds(int saved_stdin, int saved_stdout)
-{
-	int	status;
-
-	status = 0;
-	if (dup2(saved_stdin, STDIN_FILENO) < 0)
-	{
-		perror("dup2");
-		status = 1;
-	}
-	if (dup2(saved_stdout, STDOUT_FILENO) < 0)
-	{
-		perror("dup2");
-		status = 1;
-	}
-	close(saved_stdin);
-	close(saved_stdout);
-	return (status);
 }
 
 static int	execute_builtin_with_redir(t_shell *shell, t_cmd *cmd)
@@ -70,41 +50,6 @@ static int	execute_builtin_with_redir(t_shell *shell, t_cmd *cmd)
 	return (status);
 }
 
-static int	check_direct_path(char *cmd)
-{
-	struct stat	st;
-
-	if (!ft_strchr(cmd, '/'))
-		return (0);
-	if (stat(cmd, &st) < 0)
-	{
-		perror(cmd);
-		return (127);
-	}
-	if (S_ISDIR(st.st_mode))
-	{
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": Is a directory\n", 2);
-		return (126);
-	}
-	if (access(cmd, X_OK) < 0)
-	{
-		perror(cmd);
-		return (126);
-	}
-	return (0);
-}
-
-static int	execve_exit_status(char *cmd)
-{
-	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
-		return (126);
-	if (errno == ENOENT)
-		return (127);
-	perror(cmd);
-	return (1);
-}
-
 static void	child_process(t_shell *shell, t_cmd *cmd, char *path)
 {
 	int	exit_code;
@@ -127,7 +72,6 @@ static int	execute_external(t_shell *shell, t_cmd *cmd)
 	status = check_direct_path(cmd->argv[0]);
 	if (status != 0)
 		return (status);
-	status = 0;
 	path = get_cmd_path(cmd->argv[0], shell->envp);
 	if (!path)
 	{
@@ -141,15 +85,7 @@ static int	execute_external(t_shell *shell, t_cmd *cmd)
 		return (helper("fork", path));
 	if (pid == 0)
 		child_process(shell, cmd, path);
-	waitpid(pid, &status, WUNTRACED);
-	free(path);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	if (WIFSTOPPED(status))
-		return (128 + WSTOPSIG(status));
-	return (1);
+	return (wait_and_get_status(pid, path));
 }
 
 int	execute_single(t_shell *shell, t_cmd *cmd)

@@ -1,35 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipeline_child.c                                   :+:      :+:    :+:   */
+/*   executesingle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/13 17:48:19 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 15:01:13 by kal-mawl         ###   ########.fr       */
+/*   Created: 2026/06/19 15:37:14 by kal-mawl          #+#    #+#             */
+/*   Updated: 2026/06/19 15:44:24 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/execution.h"
 #include "../../libft/libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/stat.h>
 
-void	setup_child_fds(int in_fd, int out_fd)
+int	wait_and_get_status(pid_t pid, char *path)
 {
-	if (in_fd != STDIN_FILENO)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
-	if (out_fd != STDOUT_FILENO)
-	{
-		dup2(out_fd, STDOUT_FILENO);
-		close(out_fd);
-	}
+	int	status;
+
+	waitpid(pid, &status, WUNTRACED);
+	free(path);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	if (WIFSTOPPED(status))
+		return (128 + WSTOPSIG(status));
+	return (1);
 }
 
-static int	check_direct_path_child(char *cmd)
+int	restore_builtin_fds(int saved_stdin, int saved_stdout)
+{
+	int	status;
+
+	status = 0;
+	if (dup2(saved_stdin, STDIN_FILENO) < 0)
+	{
+		perror("dup2");
+		status = 1;
+	}
+	if (dup2(saved_stdout, STDOUT_FILENO) < 0)
+	{
+		perror("dup2");
+		status = 1;
+	}
+	close(saved_stdin);
+	close(saved_stdout);
+	return (status);
+}
+
+int	check_direct_path(char *cmd)
 {
 	struct stat	st;
 
@@ -54,7 +77,7 @@ static int	check_direct_path_child(char *cmd)
 	return (0);
 }
 
-static int	execve_exit_status(char *cmd)
+int	execve_exit_status(char *cmd)
 {
 	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
 		return (126);
@@ -62,30 +85,4 @@ static int	execve_exit_status(char *cmd)
 		return (127);
 	perror(cmd);
 	return (1);
-}
-
-void	exec_cmd(t_shell *shell, t_cmd *cmd)
-{
-	char	*path;
-	int		status;
-
-	if (!cmd || !cmd->argv || !cmd->argv[0])
-		exit(0);
-	if (is_builtin(cmd->argv[0]))
-		exit(exec_builtin(shell, cmd));
-	status = check_direct_path_child(cmd->argv[0]);
-	if (status != 0)
-		exit(status);
-	path = get_cmd_path(cmd->argv[0], shell->envp);
-	if (!path)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
-	}
-	execve(path, cmd->argv, shell->envp);
-	status = execve_exit_status(cmd->argv[0]);
-	free(path);
-	exit(status);
 }

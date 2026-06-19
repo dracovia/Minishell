@@ -6,12 +6,12 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:12 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/13 17:48:13 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:01:06 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../libft/libft.h"
-# include "../../include/execution.h"
+#include "../../libft/libft.h"
+#include "../../include/execution.h"
 
 void	free_split(char **arr)
 {
@@ -74,7 +74,7 @@ static char	*check_paths(char **paths, char *cmd)
 		if (!full)
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (access(full, X_OK) == 0)
 			return (full);

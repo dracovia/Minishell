@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:00 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/22 18:59:51 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/19 16:40:54 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,62 +15,7 @@
 #include "../../libft/libft.h"
 #include "get_next_line/get_next_line.h"
 #include <readline/readline.h>
-// library for rl_clear_history()
 #include <readline/history.h>
-
-static int	is_delimiter(char *line, char *delimiter)
-{
-	size_t	len;
-
-	len = ft_strlen(delimiter);
-	if (ft_strlen(line) != len + 1)
-		return (0);
-	if (ft_strncmp(line, delimiter, len) != 0)
-		return (0);
-	if (line[len] != '\n')
-		return (0);
-	return (1);
-}
-
-static int	write_heredoc_line(t_shell *shell, int write_fd,
-	char *line, t_quote_type quote)
-{
-	char	*expanded;
-
-	if (quote == Q_NONE)
-	{
-		expanded = expand_heredoc_line(line, shell);
-		free(line);
-		if (!expanded)
-			return (1);
-		line = expanded;
-	}
-	write(write_fd, line, ft_strlen(line));
-	free(line);
-	return (0);
-}
-
-static int	read_heredoc_input(t_shell *shell, int write_fd,
-	char *delimiter, t_quote_type quote)
-{
-	char	*line;
-
-	while (1)
-	{
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
-			break ;
-		if (is_delimiter(line, delimiter))
-		{
-			free(line);
-			break ;
-		}
-		if (write_heredoc_line(shell, write_fd, line, quote))
-			return (1);
-	}
-	return (0);
-}
 
 static void	free_envp_child(char **envp)
 {
@@ -122,7 +67,6 @@ int	handle_heredoc(t_shell *shell, char *delimiter, t_quote_type quote)
 {
 	int		fd[2];
 	pid_t	pid;
-	int		status;
 
 	if (pipe(fd) < 0)
 		return (perror("pipe"), -1);
@@ -136,19 +80,7 @@ int	handle_heredoc(t_shell *shell, char *delimiter, t_quote_type quote)
 	if (pid == 0)
 		heredoc_child(shell, fd, delimiter, quote);
 	close(fd[1]);
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		close(fd[0]);
-		write(1, "\n", 1);
-		return (-1);
-	}
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-	{
-		close(fd[0]);
-		return (-1);
-	}
-	return (fd[0]);
+	return (wait_heredoc_child(pid, fd[0]));
 }
 
 int	prepare_heredocs(t_shell *shell, t_cmd *cmds)

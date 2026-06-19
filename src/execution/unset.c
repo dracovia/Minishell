@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:44 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/13 17:48:45 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:02:51 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	free_env(char **envp)
 		free(envp[i++]);
 	free(envp);
 }
-
 
 static char	**copy_env_without_unset(char **envp, int index)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:32 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/05/22 17:56:01 by mfassad          ###   ########.fr       */
+/*   Updated: 2026/06/19 15:31:28 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,6 @@ static int	handle_heredoc_redir(t_redir *redir)
 	}
 	close(redir->fd);
 	redir->fd = -1;
-	return (0);
-}
-
-static int	handle_single_redir(t_redir *redir)
-{
-	if (redir->type == T_REDIR_IN)
-		return (handle_in(redir->target));
-	else if (redir->type == T_REDIR_OUT)
-		return (handle_out(redir->target));
-	else if (redir->type == T_APPEND)
-		return (handle_append(redir->target));
-	else if (redir->type == T_HEREDOC)
-		return (handle_heredoc_redir(redir));
 	return (0);
 }
 
