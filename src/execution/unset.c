@@ -6,14 +6,14 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:44 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 15:02:51 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:55:49 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/builtins.h"
 #include "../../libft/libft.h"
 
-static int	find_var_index(char *name, char **envp)
+static int	find_var_indexx(char *name, char **envp)
 {
 	int		i;
 	size_t	len;
@@ -90,7 +90,7 @@ int	builtin_unset(t_shell *shell, char **argv)
 	i = 1;
 	while (argv[i])
 	{
-		index = find_var_index(argv[i], shell->envp);
+		index = find_var_indexx(argv[i], shell->envp);
 		if (index != -1)
 			shell->envp = remove_var(shell->envp, index);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:37:14 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 15:44:24 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 18:01:55 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,4 @@ int	check_direct_path(char *cmd)
 		return (126);
 	}
 	return (0);
-}
-
-int	execve_exit_status(char *cmd)
-{
-	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
-		return (126);
-	if (errno == ENOENT)
-		return (127);
-	perror(cmd);
-	return (1);
 }

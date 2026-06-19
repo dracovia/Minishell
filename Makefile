@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+         #
+#    By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/04 07:54:57 by mfassad           #+#    #+#              #
-#    Updated: 2026/06/17 23:38:32 by mfassad          ###   ########.fr        #
+#    Updated: 2026/06/19 17:58:51 by kal-mawl         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,8 +63,13 @@ SRC			= \
 				$(EXEC_DIR)/pipeline_child.c \
 				$(EXEC_DIR)/pwd.c \
 				$(EXEC_DIR)/redir.c \
-				$(EXEC_DIR)/signals.c \
-				$(EXEC_DIR)/unset.c
+				$(EXEC_DIR)/signals2.c \
+				$(EXEC_DIR)/unset.c \
+				$(SRC_DIR)/main1.c \
+				$(EXEC_DIR)/signals1.c \
+				$(EXEC_DIR)/heredoc1.c \
+				$(EXEC_DIR)/export1.c \
+				$(EXEC_DIR)/executesingle.c 
 
 OBJ			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

@@ -6,13 +6,13 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:32 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 15:31:28 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:49:39 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/execution.h"
 
-static int	handle_in(char *file)
+int	handle_in(char *file)
 {
 	int	fd;
 
@@ -29,7 +29,7 @@ static int	handle_in(char *file)
 	return (0);
 }
 
-static int	handle_out(char *file)
+int	handle_out(char *file)
 {
 	int	fd;
 
@@ -46,7 +46,7 @@ static int	handle_out(char *file)
 	return (0);
 }
 
-static int	handle_append(char *file)
+int	handle_append(char *file)
 {
 	int	fd;
 
@@ -63,7 +63,7 @@ static int	handle_append(char *file)
 	return (0);
 }
 
-static int	handle_heredoc_redir(t_redir *redir)
+int	handle_heredoc_redir(t_redir *redir)
 {
 	if (redir->fd < 0)
 		return (1);

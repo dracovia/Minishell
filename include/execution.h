@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 14:29:16 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 16:40:11 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:50:50 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,16 @@ int		wait_heredoc_child(pid_t pid, int fd_read);
 int		handle_single_redir(t_redir *redir);
 int		check_direct_path(char *cmd);
 int		execve_exit_status(char *cmd);
+int		handle_in(char *file);
 int		wait_and_get_status(pid_t pid, char *path);
 char	*expand_heredoc_line(char *line, t_shell *shell);
 char	*get_cmd_path(char *cmd, char **envp);
 char	*get_env_value(char *name, char **envp);
 char	**free_envp_partial(char **envp, int count);
+char	*get_env_valuee(char *name, char **envp);
+int		handle_heredoc_redir(t_redir *redir);
+int		handle_append(char *file);
+int		handle_out(char *file);
 int		is_delimiter(char *line, char *delimiter);
 int		write_heredoc_line(t_shell *shell, int write_fd, char *line,
 			t_quote_type quote);

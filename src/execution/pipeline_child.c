@@ -6,7 +6,7 @@
 /*   By: kal-mawl <kal-mawl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 17:48:19 by kal-mawl          #+#    #+#             */
-/*   Updated: 2026/06/19 15:01:13 by kal-mawl         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:48:03 by kal-mawl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	check_direct_path_child(char *cmd)
 	return (0);
 }
 
-static int	execve_exit_status(char *cmd)
+int	execve_exit_status(char *cmd)
 {
 	if (errno == EACCES || errno == EISDIR || errno == ENOEXEC)
 		return (126);
